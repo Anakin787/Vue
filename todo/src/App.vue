@@ -1,26 +1,28 @@
 <template>
   <div id="background">
     <div id="main">
-      <h4 id="title">To Do List</h4>
-      <Input />
+      <Input :Input="Input" />
+      <List />
     </div>
   </div>
 </template>
 
 <script>
-import Input from "./components/Input.vue"
+import Input from "./components/Input.vue";
+import List from "./components/List.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   data() {
     return {
-
+      Input: "",
     }
   },
   components: {
     Input,
-  }
-}
+    List,
+  },
+};
 </script>
 
 <style>
@@ -51,13 +53,5 @@ div {
   border: 2px solid black;
   border-radius: 15px;
   background: white;
-}
-
-#title {
-  font-size: 2rem;
-}
-
-#title:hover {
-  color: chocolate;
 }
 </style>
