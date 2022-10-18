@@ -56,9 +56,10 @@ export default {
         localStorage.setItem("list", JSON.stringify(this.todoList))
       }
     },
-    toggleComplete: function (todo) {
+    toggleComplete: function (todo) { //10/18 집가서 나머지 좀 만져보자(체크상태확인 로직)
       todo.complete = todo.complete === 'false' ? 'true' : 'false'
     },
+
     // isChecked: function (id) {
     //   // const p = document.querySelector(".inputData");
     //   const target = this.loadData().filter(D => D.id == id)[0]; //render에서 받은 파라미터와 todos의 요소를 비교함
