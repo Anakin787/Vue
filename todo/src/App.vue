@@ -1,14 +1,26 @@
 <template>
+  <!-- 체크박스 체크시 complete값 제대로 변경(LS에 상태저장) + 가운뎃줄(LS에 상태저장)
+개별삭제,선택삭제,진행도그래프 -->
   <div id="background">
     <div id="main">
       <div>
         <h4 id="title">To Do List</h4>
-        <input type="text" v-model="Inputs" @keyup.enter="setData" class="input" placeholder="할일을 입력해 주세요">
+        <input
+          type="text"
+          v-model="Inputs"
+          @keyup.enter="setData"
+          class="input"
+          placeholder="할일을 입력해 주세요"
+        />
         <button :value="Inputs" @click="setData" class="addButton">+</button>
       </div>
-      <hr style="border:1px dashed black" />
-      <List :loadData="item[index]" v-for="(item, index) in loadData()" @tog="toggleComplete(item[index])"
-        :key="index" />
+      <hr style="border: 1px dashed black" />
+      <List
+        :loadData="loadData()[index]"
+        v-for="(item, index) in loadData()"
+        @cpl="initialize($event)"
+        :key="index"
+      />
     </div>
   </div>
 </template> 
@@ -16,7 +28,7 @@
 <script>
 //input부분을 컴포넌트로 만들고 이점보다 데이터를 주고받을때의 복잡함 등 단점이 더 크다고 판단합니다.
 //props로 보내면 자식컴포넌트에서는 Read-Only가 되기때문에 일반적으로 변경이 되지않고, 설령 Custom Event를 사용하더라도 코드가 더 복잡해지는 경우가 생겨 input부분은 컴포넌트로 사용하지 않았습니다.
-//컴포넌트는 반복적인 구문이 올때 효과적이며 간결하게 보일수 있지만, '한번만 쓰이고 데이터를 양방향으로 보내는 블럭'에 사용하기에는 오히려 복잡해 집니다.(강의보고 조금더 보충하자)
+//컴포넌트는 반복적인 구문이 올때 효과적이며 간결하게 보일수 있지만, '한번만 쓰이고 데이터를 양방향으로 보내는 블럭'에 사용하기에는 오히려 부적절(복잡해) 합니다.(강의보고 조금더 보충하자)
 import List from "./components/List.vue";
 
 export default {
@@ -34,46 +46,63 @@ export default {
   methods: {
     loadData: function () {
       if (localStorage.getItem("list")) {
-        this.get = JSON.parse(localStorage.getItem("list"))
-        return this.get
+        this.get = JSON.parse(localStorage.getItem("list"));
+        return this.get;
       }
     },
     setData: function () {
       if (this.Inputs == "") {
-        alert("할일을 입력하세요.")
-        return
+        alert("할일을 입력하세요.");
+        return;
       }
       this.addData(this.Inputs);
-      this.Inputs = ""
+      this.Inputs = "";
     },
-    addData: function (inputText) { //새로고침후 입력시 LocalStorage에 덮어써지는 문제 해결
-      if (this.get.length > 0) { //get에 데이터가있으면 get에푸쉬
-        this.get.push({ id: new Date().toISOString(), data: inputText, complete: false })
-        localStorage.setItem("list", JSON.stringify(this.get))
+    addData: function (inputText) {
+      //새로고침후 입력시 LocalStorage에 덮어써지는 문제 해결
+      if (this.get.length > 0) {
+        //get에 데이터가있으면 get에푸쉬
+        this.get.push({
+          id: new Date().toISOString(),
+          data: inputText,
+          complete: false,
+        });
+        localStorage.setItem("list", JSON.stringify(this.get));
+      } else {
+        this.todoList.push({
+          id: new Date().toISOString(),
+          data: inputText,
+          complete: false,
+        });
+        localStorage.setItem("list", JSON.stringify(this.todoList));
       }
-      else {
-        this.todoList.push({ id: new Date().toISOString(), data: inputText, complete: false })
-        localStorage.setItem("list", JSON.stringify(this.todoList))
-      }
     },
-    toggleComplete: function (todo) { //10/18 집가서 나머지 좀 만져보자(체크상태확인 로직)
-      todo.complete = todo.complete === 'false' ? 'true' : 'false'
-    },
-
-    // isChecked: function (id) {
-    //   // const p = document.querySelector(".inputData");
-    //   const target = this.loadData().filter(D => D.id == id)[0]; //render에서 받은 파라미터와 todos의 요소를 비교함
-    //   target.complete = !target.complete;
-    //   localStorage.setItem("list", JSON.stringify(this.get));
+    // toggleComplete: function (todo) {
+    // if(this.loadData())
+    //   todo.complete = todo.complete === 'false' ? 'true' : 'false'
     // },
-    // initialize: function () {
-    //   const p = document.querySelector(".inputData");
-    //   this.get.map(got => {
-    //     if (got.complete) { p.classList.add("done") }
-    //     p.addEventListener("click", (e) => { e.target.classList.toggle("done"); this.isChecked(got.id) })
-    //   })
-    // }
-  }
+
+    isChecked: function (id) {
+      const target = this.loadData().filter((D) => D.id == id); //render에서 받은 파라미터와 todos의 요소를 비교함
+      target.complete = !target.complete;
+      localStorage.setItem("list", JSON.stringify(this.loadData()));
+    },
+    initialize: function (event) {
+      //체크하면 첫번째꺼는 되는데 n번째지정고민해보자(10/19 출근시)
+      const p = document.querySelector(".inputData");
+      const chk = document.querySelector(".checkbox");
+      this.get.map((got) => {
+        //map의 문법, List.vue에 있는 데이터전송 관련고민
+        if (got.complete == event) {
+          p.classList.add("done");
+        }
+        chk.addEventListener("click", () => {
+          p.classList.toggle("done");
+          this.isChecked(got.id);
+        });
+      });
+    },
+  },
 };
 </script>
 

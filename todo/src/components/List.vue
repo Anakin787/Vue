@@ -1,9 +1,9 @@
 <template>
   <div>
     <div id="todo-list">
-      <input v-model="state" class="checkbox" type="checkbox" />
+      <input @click="$emit('cpl',loadData.complete)" :v-model="loadData.complete" class="checkbox" type="checkbox" />
       <p class="inputData">{{loadData.data}}</p>
-      <button class="del" @click="$emit('tog')">X</button><br />
+      <button class="del">X</button><br />
     </div>
   </div>
 </template>
@@ -13,7 +13,6 @@ export default {
   name: "List",
   data() {
     return {
-      state: false
     }
   },
   props: {
