@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="todo-list">
-      <button @click="$emit('cpl',true)" class="checked" type="button">✔️</button>
+      <button @click="$emit('cpl',loadData.id)" class="checked">✔️</button>
       <p class="inputData" v-bind:class="{done:loadData.complete}">{{loadData.data}}</p>
       <button class="del">X</button><br />
     </div>
@@ -55,5 +55,8 @@ export default {
   flex-grow: 1;
   cursor: pointer;
   padding: 0;
+}
+.done {
+  text-decoration: line-through;
 }
 </style>

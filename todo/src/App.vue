@@ -6,12 +6,24 @@
     <div id="main">
       <div>
         <h4 id="title">To Do List</h4>
-        <input type="text" v-model="Inputs" @keyup.enter="setData" class="input" placeholder="할일을 입력해 주세요" />
+        <input
+          type="text"
+          v-model="Inputs"
+          @keyup.enter="setData"
+          class="input"
+          placeholder="할일을 입력해 주세요"
+        />
         <button :value="Inputs" @click="setData" class="addButton">+</button>
       </div>
       <hr style="border: 1px dashed black" />
-      <List :loadData="loadData()[index]" v-for="(item, index) in loadData()"
-        @cpl="loadData().complete=true;isChecked($event)" :key="index" />
+      <List
+        :loadData="loadData()[index]"
+        v-for="(item, index) in loadData()"
+        @cpl="
+          isChecked($event);
+        "
+        :key="index"
+      />
     </div>
   </div>
 </template> 
@@ -50,8 +62,10 @@ export default {
       this.Inputs = "";
     },
     addData: function (inputText) {
+      //여긴 변경 x
       //새로고침후 입력시 LocalStorage에 덮어써지는 문제 해결
-      if (this.get.length > 0) {  //get에 데이터가있으면 get에푸쉬
+      if (this.get.length > 0) {
+        //get에 데이터가있으면 get에푸쉬
         this.get.push({
           id: new Date().toISOString(),
           data: inputText,
@@ -67,18 +81,18 @@ export default {
         localStorage.setItem("list", JSON.stringify(this.todoList));
       }
     },
-    isChecked: function (event) { //10/19 집가서 코드정리 (클릭한거 p태그 줄긋기)
-      const p = document.querySelector(".inputData");
-      const target = this.loadData().map(function (D) {
-        p.addEventListener("click", (e) => {
-          e.target.classList.toggle("done")
-          // target.complete = !target.complete;
-          // localStorage.removeItemItem("list", JSON.stringify(this.loadData()));
-          // localStorage.setItem("list", JSON.stringify(this.loadData()));
-        });
-      });
+
+    //이부분은 map과 filter를 다시 곰곰히 파악해서 수행해 보도록
+    //1번째(List.vue) : 클릭을 하면 해당된id를 보내서 isChecked파라미터로 전송한다.
+    //2번째(isChecked) : loadData()에서 for문을쓰든 filter를쓰든 ★id를 비교하여 해당된것의 complete값을 반대로 바꾼후 localStorage에 다시 저장한다.
+    isChecked: function () {
+      if (this.loadData().complete == event) {
+        this.loadData().complete = !this.loadData().complete;
+        localStorage.setItem("list", JSON.stringify(this.loadData()));
+      }
     },
-  }
+  },
+};
 </script>
 
 <style>
