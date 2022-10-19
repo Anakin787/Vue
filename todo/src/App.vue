@@ -1,26 +1,16 @@
 <template>
-  <!-- 체크박스 체크시 complete값 제대로 변경(LS에 상태저장) + 가운뎃줄(LS에 상태저장)
+  <!-- 남은사항
+체크박스 체크시 complete값 제대로 변경(LS에 상태저장) + 가운뎃줄(LS에 상태저장)
 개별삭제,선택삭제,진행도그래프 -->
   <div id="background">
     <div id="main">
       <div>
         <h4 id="title">To Do List</h4>
-        <input
-          type="text"
-          v-model="Inputs"
-          @keyup.enter="setData"
-          class="input"
-          placeholder="할일을 입력해 주세요"
-        />
+        <input type="text" v-model="Inputs" @keyup.enter="setData" class="input" placeholder="할일을 입력해 주세요" />
         <button :value="Inputs" @click="setData" class="addButton">+</button>
       </div>
       <hr style="border: 1px dashed black" />
-      <List
-        :loadData="loadData()[index]"
-        v-for="(item, index) in loadData()"
-        @cpl="initialize($event)"
-        :key="index"
-      />
+      <List :loadData="loadData()[index]" v-for="(item, index) in loadData()" @cpl="isChecked($event);" :key="index" />
     </div>
   </div>
 </template> 
@@ -60,8 +50,7 @@ export default {
     },
     addData: function (inputText) {
       //새로고침후 입력시 LocalStorage에 덮어써지는 문제 해결
-      if (this.get.length > 0) {
-        //get에 데이터가있으면 get에푸쉬
+      if (this.get.length > 0) {  //get에 데이터가있으면 get에푸쉬
         this.get.push({
           id: new Date().toISOString(),
           data: inputText,
@@ -77,30 +66,11 @@ export default {
         localStorage.setItem("list", JSON.stringify(this.todoList));
       }
     },
-    // toggleComplete: function (todo) {
-    // if(this.loadData())
-    //   todo.complete = todo.complete === 'false' ? 'true' : 'false'
-    // },
-
-    isChecked: function (id) {
-      const target = this.loadData().filter((D) => D.id == id); //render에서 받은 파라미터와 todos의 요소를 비교함
+    isChecked: function (event) {
+      const target = this.loadData().map(D => D.complete == event); //render에서 받은 파라미터와 todos의 요소를 비교함
       target.complete = !target.complete;
+      localStorage.removeItemItem("list", JSON.stringify(this.loadData()));
       localStorage.setItem("list", JSON.stringify(this.loadData()));
-    },
-    initialize: function (event) {
-      //체크하면 첫번째꺼는 되는데 n번째지정고민해보자(10/19 출근시)
-      const p = document.querySelector(".inputData");
-      const chk = document.querySelector(".checkbox");
-      this.get.map((got) => {
-        //map의 문법, List.vue에 있는 데이터전송 관련고민
-        if (got.complete == event) {
-          p.classList.add("done");
-        }
-        chk.addEventListener("click", () => {
-          p.classList.toggle("done");
-          this.isChecked(got.id);
-        });
-      });
     },
   },
 };

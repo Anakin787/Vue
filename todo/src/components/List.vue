@@ -1,8 +1,8 @@
 <template>
   <div>
     <div id="todo-list">
-      <input @click="$emit('cpl',loadData.complete)" :v-model="loadData.complete" class="checkbox" type="checkbox" />
-      <p class="inputData">{{loadData.data}}</p>
+      <button @click="$emit('cpl')" class="checked" type="button">✔️</button>
+      <p class="inputData" v-bind:class="{done:loadData.complete}">{{loadData.data}}</p>
       <button class="del">X</button><br />
     </div>
   </div>
@@ -32,9 +32,13 @@ export default {
   margin-top: 20px;
 }
 
-.checkbox {
+.checked {
   flex-grow: 1;
   cursor: pointer;
+  font-size: large;
+  color: red;
+  border: none;
+  background: white;
 }
 
 .inputData {
