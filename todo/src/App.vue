@@ -10,7 +10,8 @@
         <button :value="Inputs" @click="setData" class="addButton">+</button>
       </div>
       <hr style="border: 1px dashed black" />
-      <List :loadData="loadData()[index]" v-for="(item, index) in loadData()" @cpl="isChecked($event);" :key="index" />
+      <List :loadData="loadData()[index]" v-for="(item, index) in loadData()"
+        @cpl="loadData().complete=true;isChecked($event)" :key="index" />
     </div>
   </div>
 </template> 
@@ -66,14 +67,18 @@ export default {
         localStorage.setItem("list", JSON.stringify(this.todoList));
       }
     },
-    isChecked: function (event) {
-      const target = this.loadData().map(D => D.complete == event); //render에서 받은 파라미터와 todos의 요소를 비교함
-      target.complete = !target.complete;
-      localStorage.removeItemItem("list", JSON.stringify(this.loadData()));
-      localStorage.setItem("list", JSON.stringify(this.loadData()));
+    isChecked: function (event) { //10/19 집가서 코드정리 (클릭한거 p태그 줄긋기)
+      const p = document.querySelector(".inputData");
+      const target = this.loadData().map(function (D) {
+        p.addEventListener("click", (e) => {
+          e.target.classList.toggle("done")
+          // target.complete = !target.complete;
+          // localStorage.removeItemItem("list", JSON.stringify(this.loadData()));
+          // localStorage.setItem("list", JSON.stringify(this.loadData()));
+        });
+      });
     },
-  },
-};
+  }
 </script>
 
 <style>

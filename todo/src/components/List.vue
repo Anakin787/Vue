@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="todo-list">
-      <button @click="$emit('cpl')" class="checked" type="button">✔️</button>
+      <button @click="$emit('cpl',true)" class="checked" type="button">✔️</button>
       <p class="inputData" v-bind:class="{done:loadData.complete}">{{loadData.data}}</p>
       <button class="del">X</button><br />
     </div>
