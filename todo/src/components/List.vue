@@ -2,8 +2,8 @@
   <div>
     <div id="todo-list">
       <button @click="$emit('cpl',loadData.id)" class="checked">✔️</button>
-      <p class="inputData" v-bind:class="{done:loadData.complete}">{{loadData.data}}</p>
-      <button class="del">X</button><br />
+      <p class="inputData" v-bind:class="{'done':loadData.complete}">{{loadData.data}}</p>
+      <button @click="$emit('del',loadData.id)" class="del">X</button><br />
     </div>
   </div>
 </template>
@@ -16,7 +16,8 @@ export default {
     }
   },
   props: {
-    loadData: Array
+    loadData: Object,
+    index: Number
   },
   methods: {
 
@@ -33,7 +34,7 @@ export default {
 }
 
 .checked {
-  flex-grow: 1;
+  width: 15%;
   cursor: pointer;
   font-size: large;
   color: red;
@@ -43,7 +44,7 @@ export default {
 
 .inputData {
   font-size: 1.5rem;
-  flex-grow: 7;
+  width: 70%;
   margin: 0;
 }
 
@@ -52,11 +53,13 @@ export default {
   border: none;
   border-radius: 15px;
   background: darkorange;
-  flex-grow: 1;
+  width: 10%;
   cursor: pointer;
   padding: 0;
 }
+
 .done {
   text-decoration: line-through;
+  color: red;
 }
 </style>

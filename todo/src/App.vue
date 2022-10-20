@@ -6,24 +6,15 @@
     <div id="main">
       <div>
         <h4 id="title">To Do List</h4>
-        <input
-          type="text"
-          v-model="Inputs"
-          @keyup.enter="setData"
-          class="input"
-          placeholder="할일을 입력해 주세요"
-        />
+        <input type="text" v-model="Inputs" @keyup.enter="setData" class="input" placeholder="할일을 입력해 주세요" />
         <button :value="Inputs" @click="setData" class="addButton">+</button>
       </div>
       <hr style="border: 1px dashed black" />
-      <List
-        :loadData="loadData()[index]"
-        v-for="(item, index) in loadData()"
-        @cpl="
-          isChecked($event);
-        "
-        :key="index"
-      />
+      <List :loadData="loadData()[index]" v-for="(item, index) in loadData()" @cpl="
+      isChecked" @del="del" :key="index" />
+      <hr>
+      <button class="delAll" @click="delAll">Delete All</button>
+      <button class="delSel" @click="delSel">Delete Selected</button>
     </div>
   </div>
 </template> 
@@ -38,7 +29,7 @@ export default {
   name: "App",
   data() {
     return {
-      Inputs: "",
+      Inputs: "", //입력하는곳
       todoList: [],
       get: [],
     };
@@ -53,6 +44,7 @@ export default {
         return this.get;
       }
     },
+
     setData: function () {
       if (this.Inputs == "") {
         alert("할일을 입력하세요.");
@@ -62,35 +54,38 @@ export default {
       this.Inputs = "";
     },
     addData: function (inputText) {
-      //여긴 변경 x
-      //새로고침후 입력시 LocalStorage에 덮어써지는 문제 해결
-      if (this.get.length > 0) {
-        //get에 데이터가있으면 get에푸쉬
-        this.get.push({
-          id: new Date().toISOString(),
-          data: inputText,
-          complete: false,
-        });
-        localStorage.setItem("list", JSON.stringify(this.get));
-      } else {
-        this.todoList.push({
-          id: new Date().toISOString(),
-          data: inputText,
-          complete: false,
-        });
-        localStorage.setItem("list", JSON.stringify(this.todoList));
-      }
+      this.get.push({
+        id: new Date().toISOString(),
+        data: inputText,
+        complete: false,
+      });
+      localStorage.setItem("list", JSON.stringify(this.get));
     },
 
-    //이부분은 map과 filter를 다시 곰곰히 파악해서 수행해 보도록
     //1번째(List.vue) : 클릭을 하면 해당된id를 보내서 isChecked파라미터로 전송한다.
     //2번째(isChecked) : loadData()에서 for문을쓰든 filter를쓰든 ★id를 비교하여 해당된것의 complete값을 반대로 바꾼후 localStorage에 다시 저장한다.
-    isChecked: function () {
-      if (this.loadData().complete == event) {
-        this.loadData().complete = !this.loadData().complete;
-        localStorage.setItem("list", JSON.stringify(this.loadData()));
-      }
+    isChecked: function (id) {
+      const checking = this.get.filter(C => C.id == id)[0]; //filter는 Array를 리턴한다!
+      checking.complete = !checking.complete;
+      localStorage.setItem("list", JSON.stringify(this.get));
+      this.get = JSON.parse(localStorage.getItem('list')) //데이터를 다시 변수에 넣어야 실시간렌더링 됌 loadData가 리턴값을 가지는데 변수에다 함수를 실행하면 오류가나기때문에 그냥 this.get적음
     },
+    delAll: function () {
+      localStorage.removeItem("list")
+      this.get = JSON.parse(localStorage.getItem('list'))
+    },
+    delSel: function () {
+      //complete가 false인 애들을 변수에 담고 setItem
+      const arr = this.get.filter(C => C.complete != true);
+      localStorage.setItem("list", JSON.stringify(arr));
+      this.get = JSON.parse(localStorage.getItem('list'))
+    },
+    del: function (id) {
+      const del = this.get.filter(C => C.id != id);
+      localStorage.setItem("list", JSON.stringify(del));
+      this.get = JSON.parse(localStorage.getItem('list'))
+    }
+
   },
 };
 </script>
@@ -114,10 +109,10 @@ body {
 
 #main {
   width: 40%;
-  height: 50%;
+  height: 70%;
   display: inline-block;
   margin: auto;
-  margin-top: 250px;
+  margin-top: 150px;
   border: 2px solid black;
   border-radius: 15px;
   background: white;
@@ -155,7 +150,34 @@ body {
   cursor: pointer;
 }
 
-.done {
-  text-decoration: line-through;
+.addButton:hover {
+  background: black;
+  color: darkorange;
+}
+
+.delAll {
+  width: 15%;
+  height: 5%;
+  font-size: large;
+  border: none;
+  border-radius: 15px;
+  float: right;
+  background: darkorange;
+  margin-right: 2rem;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.delSel {
+  width: 25%;
+  height: 5%;
+  font-size: large;
+  border: none;
+  border-radius: 15px;
+  float: right;
+  background: darkorange;
+  margin-right: 2rem;
+  margin-top: 20px;
+  cursor: pointer;
 }
 </style>
