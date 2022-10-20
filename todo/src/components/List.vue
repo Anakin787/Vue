@@ -35,9 +35,12 @@ export default {
 
 .checked {
   width: 15%;
+  height: 5%;
+  margin: auto;
   cursor: pointer;
   font-size: large;
-  color: red;
+  background-color: transparent;
+  ;
   border: none;
   background: white;
 }
@@ -45,17 +48,25 @@ export default {
 .inputData {
   font-size: 1.5rem;
   width: 70%;
+  height: 10%;
   margin: 0;
 }
 
 .del {
+  width: 10%;
+  height: 5%;
+  margin: auto;
   font-size: 1.5rem;
   border: none;
   border-radius: 15px;
   background: darkorange;
-  width: 10%;
   cursor: pointer;
   padding: 0;
+}
+
+.del:hover {
+  background: black;
+  color: darkorange;
 }
 
 .done {

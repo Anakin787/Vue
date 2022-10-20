@@ -8,11 +8,11 @@
         <button :value="Inputs" @click="setData" class="addButton">+</button>
       </div>
       <hr style="border: 1px dashed black" />
-      <List :loadData="loadData()[index]" v-for="(item, index) in loadData()" @cpl="
-      isChecked" @del="del" :key="index" />
-      <hr>
+      <List :loadData="loadData()[index]" @cpl="isChecked" @del="del" v-for="(item, index) in loadData()"
+        :key="index" />
+      <hr style="margin-top: 1rem;">
       <button class="delAll" @click="delAll">Delete All</button>
-      <button class="delSel" @click="delSel">Delete Selected</button>
+      <button class="delSel" @click="delSel">Delete Done</button>
     </div>
   </div>
 </template> 
@@ -28,7 +28,6 @@ export default {
   data() {
     return {
       Inputs: "", //입력하는곳
-      todoList: [],
       get: [],
     };
   },
@@ -64,25 +63,25 @@ export default {
     //2번째(isChecked) : loadData()에서 for문을쓰든 filter를쓰든 ★id를 비교하여 해당된것의 complete값을 반대로 바꾼후 localStorage에 다시 저장한다.
     //완료처리
     isChecked: function (id) {
-      const checking = this.get.filter(C => C.id == id)[0]; //filter는 Array를 리턴한다! - 하나라도 첫번째 항목지정해야
+      const checking = this.get.filter(C => C.id === id)[0]; //filter는 Array를 리턴한다! - 하나라도 첫번째 항목지정해야
       checking.complete = !checking.complete;
       localStorage.setItem("list", JSON.stringify(this.get));
       this.get = JSON.parse(localStorage.getItem('list')) //데이터를 다시 변수에 넣어야 실시간렌더링 됌 loadData가 리턴값을 가지는데 변수에다 함수를 실행하면 오류가나기때문에 그냥 this.get적음
     },
-    //전체삭제
+    //전체삭제★
     delAll: function () {
       localStorage.removeItem("list")
       this.get = JSON.parse(localStorage.getItem('list'))
     },
     //체크된것 삭제
     delSel: function () {
-      const arr = this.get.filter(C => C.complete != true); //complete값 비교하여 false인것만 다시 담아서 저장
+      const arr = this.get.filter(C => C.complete !== true); //complete값 비교하여 false인것만 다시 담아서 저장
       localStorage.setItem("list", JSON.stringify(arr));
       this.get = JSON.parse(localStorage.getItem('list'))
     },
     //개별항목 삭제
     del: function (id) {
-      const del = this.get.filter(C => C.id != id); //선택한것과 다른 항목들만 다시 담아서 저장
+      const del = this.get.filter(C => C.id !== id); //선택한것과 다른 항목들만 다시 담아서 저장
       localStorage.setItem("list", JSON.stringify(del));
       this.get = JSON.parse(localStorage.getItem('list'))
     }
@@ -99,10 +98,9 @@ body {
 
 #background {
   width: 100%;
-  height: 100vh;
-  position: fixed;
+  height: 100%;
   background-size: cover;
-  background-repeat: no-repeat;
+  background-repeat: repeat;
   background-position: center;
   background-image: url("./assets/back.jpg");
 }
@@ -110,6 +108,7 @@ body {
 #main {
   width: 40%;
   height: 70%;
+  position: relative;
   display: inline-block;
   margin: auto;
   margin-top: 150px;
@@ -157,15 +156,21 @@ body {
 
 .delAll {
   width: 15%;
-  height: 5%;
+  height: 10%;
   font-size: large;
   border: none;
   border-radius: 15px;
   float: right;
   background: darkorange;
   margin-right: 2rem;
-  margin-top: 20px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   cursor: pointer;
+}
+
+.delAll:hover {
+  background: black;
+  color: darkorange;
 }
 
 .delSel {
@@ -177,7 +182,13 @@ body {
   float: right;
   background: darkorange;
   margin-right: 2rem;
-  margin-top: 20px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   cursor: pointer;
+}
+
+.delSel:hover {
+  background: black;
+  color: darkorange;
 }
 </style>
