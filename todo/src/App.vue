@@ -68,9 +68,10 @@ export default {
       localStorage.setItem("list", JSON.stringify(this.get));
       this.get = JSON.parse(localStorage.getItem('list')) //데이터를 다시 변수에 넣어야 실시간렌더링 됌 loadData가 리턴값을 가지는데 변수에다 함수를 실행하면 오류가나기때문에 그냥 this.get적음
     },
-    //전체삭제★
+    //전체삭제
     delAll: function () {
-      localStorage.removeItem("list")
+      this.get = []
+      localStorage.setItem("list", JSON.stringify(this.get))
       this.get = JSON.parse(localStorage.getItem('list'))
     },
     //체크된것 삭제
@@ -94,21 +95,18 @@ body {
   margin: 0;
   text-align: center;
   box-sizing: border-box;
+  background-size: cover;
+  background-image: url("./assets/back.jpg");
 }
 
 #background {
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-repeat: repeat;
-  background-position: center;
-  background-image: url("./assets/back.jpg");
 }
 
 #main {
   width: 40%;
   height: 70%;
-  position: relative;
   display: inline-block;
   margin: auto;
   margin-top: 150px;
@@ -156,7 +154,7 @@ body {
 
 .delAll {
   width: 15%;
-  height: 10%;
+  height: 5%;
   font-size: large;
   border: none;
   border-radius: 15px;
