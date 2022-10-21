@@ -7,8 +7,8 @@ import Author from './components/Author.vue'
 //위일수록 우선권 가진다
 const routes = [
   {
-    path: "/list",
-    component: list, //위에서 import해야 첨부가능
+    path: "/list", // named views 여러개 컴포넌트 보여줄 때 - vue Router페이지 참고!
+    component: list,
   },
   {
     path: "/",
