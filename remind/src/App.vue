@@ -1,17 +1,17 @@
 <template>
   <div>
-    <modal @closeModal="모달창열렸니=false" :원룸들="원룸들" :누른거="누른거" :모달창열렸니="모달창열렸니" /> <!-- :보낼이름="밑에있는이름"-->
+    <div class="start" v-bind:class="{'end':모달창열렸니}">
+      <modal @closeModal="모달창열렸니=false" :원룸들="원룸들" :누른거="누른거" :모달창열렸니="모달창열렸니" /> <!-- :보낼이름="밑에있는이름"-->
+    </div>
     <div class="menu">
       <a v-for="(a, i) in 메뉴들" :key="i">{{a}}</a>
     </div>
 
-    <discount />
+    <discount :dc="dc" v-if="showDiscount==true" />
+
+    <button @click="priceSort">가격순 정렬</button>
+    <button @click="sortback">되돌리기</button>
     <Card @openModal="모달창열렸니=true; 누른거=$event " :원룸들="원룸들" :누른거="누른거" />
-    <!-- <div v-for="(item, index) in 원룸들" :key="index">
-      <img :src="item.image" class="roomimg">
-      <h4 @click="모달창열렸니=true; 누른거=index">{{ item.title }}</h4>
-      <p>{{item.price}}원</p>
-    </div> -->
   </div>
 </template>
 
@@ -45,6 +45,9 @@ export default {
   //data는 한곳에다가 보관함
   data() {
     return {
+      dc: 10,
+      showDiscount: true,
+      원룸들오리지널: [...data], //spread Operator - 불변성
       누른거: 0,
       원룸들: data,
       모달창열렸니: false,
@@ -54,7 +57,22 @@ export default {
     };
   },
   methods: {
-
+    priceSort() {
+      this.원룸들.sort(function (a, b) { //sort는 원본 보존x map,filter는 보존o
+        return a.price - b.price //양수면 a를 오른쪽으로
+      })
+    },
+    sortback() {
+      this.원룸들 = [...this.원룸들오리지널]
+    }
+  },
+  mounted() { // App.vue가 mount되고나서 실행
+    setInterval(() => {
+      if (this.dc == 1) {
+        this.showDiscount = false
+      }
+      this.dc -= 1
+    }, 1000)
   },
   components: {
     discount: discount,
@@ -72,6 +90,15 @@ body {
 
 div {
   box-sizing: border-box;
+}
+
+.start {
+  opacity: 0;
+  transition: all 1s;
+}
+
+.end {
+  opacity: 1;
 }
 
 .roomimg {

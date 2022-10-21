@@ -3,8 +3,9 @@
         <div class="white-bg">
             <img :src="원룸들[누른거].image">
             <h4>{{원룸들[누른거].title}}</h4>
-            <p>{{원룸들[누른거].price}}원</p>
             <p>{{원룸들[누른거].content}}</p>
+            <input v-model="month">
+            <p>{{month}}개월 선택함 : {{원룸들[누른거].price*month}}원</p>
             <button @click="$emit('closeModal')">닫기</button>
         </div>
     </div>
@@ -12,11 +13,22 @@
 
 <script>
 export default {
+    data() {
+        return {
+            month: 3
+        }
+    },
     props: {
         원룸들: String,
         누른거: Number,
         모달창열렸니: Boolean
-    }
+    },
+    beforeUpdate() {
+        if (this.month == 2 || this.month == 1) {
+            alert("3이상 입력해라")
+            this.month = 3
+        }
+    },
 }
 </script>
 

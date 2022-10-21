@@ -17,7 +17,6 @@ export default {
   },
   props: {
     loadData: Object,
-    index: Number
   },
   methods: {
 

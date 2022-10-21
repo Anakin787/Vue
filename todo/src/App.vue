@@ -12,10 +12,10 @@
         :key="index" />
       <hr style="margin-top: 1rem;">
       <button class="delAll" @click="delAll">Delete All</button>
-      <button class="delSel" @click="delSel">Delete Done</button>
+      <button class="delDone" @click="delDone">Delete Done</button>
     </div>
   </div>
-</template> 
+</template>
 
 <script>
 //input부분을 컴포넌트로 만들고 이점보다 데이터를 주고받을때의 복잡함 등 단점이 더 크다고 판단합니다.
@@ -75,7 +75,7 @@ export default {
       this.get = JSON.parse(localStorage.getItem('list'))
     },
     //체크된것 삭제
-    delSel: function () {
+    delDone: function () {
       const arr = this.get.filter(C => C.complete !== true); //complete값 비교하여 false인것만 다시 담아서 저장
       localStorage.setItem("list", JSON.stringify(arr));
       this.get = JSON.parse(localStorage.getItem('list'))
@@ -153,7 +153,7 @@ body {
 }
 
 .delAll {
-  width: 15%;
+  width: 20%;
   height: 5%;
   font-size: large;
   border: none;
@@ -171,7 +171,7 @@ body {
   color: darkorange;
 }
 
-.delSel {
+.delDone {
   width: 25%;
   height: 5%;
   font-size: large;
@@ -185,8 +185,36 @@ body {
   cursor: pointer;
 }
 
-.delSel:hover {
+.delDone:hover {
   background: black;
   color: darkorange;
+}
+
+@media screen and (max-width: 1200px) {
+  #main {
+    width: 60%;
+  }
+
+  .delAll {
+    width: 30%;
+  }
+
+  .delDone {
+    width: 30%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #title {
+    font-size: 2rem;
+  }
+
+  .input.input::-webkit-input-placeholder {
+    font-size: 1.5rem;
+  }
+
+  .delDone {
+    width: 40%;
+  }
 }
 </style>
