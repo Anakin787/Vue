@@ -24,12 +24,12 @@
 <script>
 import Container from './components/Container.vue';
 import data from './data'
- 
+
 export default {
   name: 'App',
   data() {
     return {
-      피드:data,
+      피드: data,
     };
   },
   //컨테이너는 import하고 등록하고 갔다쓰면된다.
