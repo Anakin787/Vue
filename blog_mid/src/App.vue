@@ -40,18 +40,16 @@
         </div>
       </div>
     </nav>
-    <div class="container mt-4">
+    <!-- <div class="container mt-4">
       <h4>Vue개발자의 블로그입니다.</h4>
       <p>ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ</p>
-    </div>
+    </div> -->
 
+    <!-- <router-link to="/">홈페이지</router-link><br> -->
     <router-link to="/list">리스트페이지</router-link><br>
-    <router-link to="/">홈페이지</router-link><br>
+    <router-view :블로그글='블로그글'></router-view>
     <router-link to="/detail">상세페이지</router-link><br>
 
-    <router-view :블로그글='블로그글'></router-view>
-
-    <!-- <list :블로그글='블로그글[i]' v-for="(a,i) in 블로그글" :key="i"/> -->
   </div>
 </template>
 

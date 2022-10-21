@@ -1,5 +1,8 @@
 <template>
-  <!-- 남은사항 : 진행도그래프 -->
+  <!--
+  ★남은사항 : 진행도그래프 
+  ★LifeCycle을 사용하여 구현해보기
+  -->
   <div id="background">
     <div id="main">
       <div>
