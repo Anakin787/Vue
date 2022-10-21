@@ -1,10 +1,12 @@
 <template>
     <div>
+        <!-- Container의 Post에 반복문써봐 -->
         <div class="post" v-for="(a,i) in 피드" :key="i">
             <div class="post-header">
                 <div class="profile" :style="{backgroundImage:`url(${a.userImage})`}"></div>
                 <span class="profile-name">{{a.name}}</span>
             </div>
+            <!-- 속성에 변수 `${}` 사용 -->
             <div class="post-body" :style="{backgroundImage:`url(${a.postImage})` }"></div>
             <div class="post-content">
                 <p>{{a.likes}}</p>
@@ -29,7 +31,6 @@ export default {
 }
 
 .profile {
-    /* background-image: url("https://placeimg.com/100/100/arch"); */
     width: 30px;
     height: 30px;
     background-size: 100%;
@@ -51,7 +52,6 @@ export default {
 }
 
 .post-body {
-    /* background-image: url("https://placeimg.com/640/480/animals"); */
     height: 450px;
     background-position: center;
     background-size: cover;

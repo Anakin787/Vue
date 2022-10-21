@@ -1,7 +1,7 @@
 <template>
   <div>
-      <post :피드="data" />
-      <!-- <post :피드="data" />
+    <post :피드="data" />
+    <!-- <post :피드="data" />
       <post :피드="data" /> -->
   </div>
 </template>
@@ -19,7 +19,7 @@ export default {
   },
   props: {
     data: Array,
-  } 
+  }
 }
 </script>
 

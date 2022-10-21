@@ -9,7 +9,7 @@
       </ul>
       <img src="./assets/logo.png" class="logo" />
     </div>
-
+    <!-- :작명="데이터이름" -->
     <Container :data="피드" />
 
     <div class="footer">
