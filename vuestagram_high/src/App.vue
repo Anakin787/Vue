@@ -9,9 +9,17 @@
       </ul>
       <img src="./assets/logo.png" class="logo" />
     </div>
+
+    <h4>안녕 {{ $store.state.name }} {{ $store.state.age }}</h4>
+    <button @click="이름변경()">이름변경</button> <!-- ...mapMutations으로 축약사용 가능 -->
+    <button @click="$store.commit('나이변경')">나이변경</button>
+    <p>{{ $store.state.more }}</p>
+    <button @click="$store.dispatch('getData')">더보기버튼</button>
+
+
     <!-- :작명="데이터이름" -->
     <Container :data="피드" />
-
+    <button @click="more">더보기</button>
     <div class="footer">
       <ul class="footer-button-plus">
         <input type="file" id="file" class="inputfile" />
@@ -24,7 +32,10 @@
 <script>
 import Container from './components/Container.vue';
 import data from './data'
+import axios from 'axios'
+import { mapState, mapMutations } from 'vuex'
 
+axios.post()
 export default {
   name: 'App',
   data() {
@@ -32,10 +43,24 @@ export default {
       피드: data,
     };
   },
+
   //컨테이너는 import하고 등록하고 갔다쓰면된다.
   components: {
     Container: Container
   },
+  computed: {
+    ...mapState(['name', 'age']), //vuex state한번에 꺼내 쓰려면
+    ...mapState({ 내이름: 'name' }) //object형으로도 사용가능
+  },
+  methods: {
+    ...mapMutations('setMore', '이름변경', '나이변경'),
+    more: function () {
+      axios.get('https://codingapple1.github.io/vue/more0.json')
+        .then(a => {//요청 성공시 실행할 코드
+          this.피드.push(a.data)
+        })
+    }
+  }
 }
 </script>
 

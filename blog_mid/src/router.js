@@ -7,12 +7,12 @@ import Author from './components/Author.vue'
 //위일수록 우선권 가진다
 const routes = [
   {
-    path: "/list", // named views 여러개 컴포넌트 보여줄 때 - vue Router페이지 참고!
-    component: list,
-  },
-  {
     path: "/",
     component: home,
+  },
+  {
+    path: "/list", // named views 여러개 컴포넌트 보여줄 때 - vue Router페이지 참고!
+    component: list,
   },
   {
     path: "/detail/:id", //:작명 (+파라미터 정규식 첨부가능)
